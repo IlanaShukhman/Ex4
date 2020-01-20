@@ -114,7 +114,16 @@ public class SimpleGameClient {
 		System.out.println(gameServer.get_data());
 
 
+		
+		
 		KML_Logger kmlFile=new KML_Logger(scenario_num, gameGraph, robots, fruits, game);
+		
+		
+		
+		
+		
+		
+		
 		try {
 			while(game.isRunning()) {
 				moveRobots(game, gameGraph);
@@ -140,6 +149,8 @@ public class SimpleGameClient {
 	 */
 	private static void moveRobots(game_service game, graph graph) {
 		List<String> log = game.move();
+		
+		
 		if(log!=null) {
 			long t = game.timeToEnd();
 			gui.setTimeToEnd(t/1000);
