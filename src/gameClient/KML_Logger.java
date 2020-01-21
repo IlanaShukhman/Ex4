@@ -26,6 +26,7 @@ public class KML_Logger implements Runnable {
 	private List<Fruit_Client> fruits;
 	private game_service game;
 	private int timeOfGame;
+	private String kmlfile;
 	
 	/**
 	 * Constructor.
@@ -41,6 +42,8 @@ public class KML_Logger implements Runnable {
 			this.timeOfGame=60000;
 		else
 			this.timeOfGame=30000;
+		
+		kmlfile="";
 
 
 		Thread thr=new Thread(this);
@@ -100,6 +103,8 @@ public class KML_Logger implements Runnable {
 				"</Placemark>\r\n" +  
 				"</Document>\r\n" + 
 				"</kml>\r\n";
+		
+		kmlfile=file;
 
 
 		try {
@@ -110,6 +115,11 @@ public class KML_Logger implements Runnable {
 
 
 		return file;
+	}
+	
+	
+	public String getKMLFile() {
+		return kmlfile;
 	}
 
 	/**

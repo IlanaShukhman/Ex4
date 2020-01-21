@@ -1,7 +1,6 @@
 package gameClient;
 
 import java.awt.Color;
-import java.awt.Robot;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -45,8 +44,7 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 	private double score;
 	private long timeToEnd;
 	private int level;
-	private boolean isRunning;	
-	private String map;
+	private boolean isRunning;
 
 	//This is used to determine if it is automatic or manual
 	private int state;
@@ -100,12 +98,7 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 
 	/**
 	 * Setters.
-	 * @param map
 	 */
-
-	public void setMap(String map) {
-		this.map=map;
-	}
 	public void setScore(double score) {
 		this.score = score;
 	}

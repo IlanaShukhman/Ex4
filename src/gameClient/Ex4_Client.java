@@ -1,5 +1,6 @@
 package gameClient;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -7,9 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JOptionPane;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import Server.Game_Server;
 import Server.game_service;
@@ -55,25 +53,28 @@ public class Ex4_Client implements Runnable{
 
 	@Override
 	public void run() {
+
+		String getID=JOptionPane.showInputDialog(this, "Type in your ID:");
+		int id = Integer.valueOf(getID);
+		Game_Server.login(id);
+
 		//Create Graph
 		String s=chooseScenarioFromList();
-
 		//if the user decided to cancel
 		if(s==null)
 			return;
-		String getID=JOptionPane.showInputDialog(this, "Type in your ID:");
-		int id = Integer.valueOf(getID);
-
-		Game_Server.login(id);
-
 
 		int scenario_num =Integer.valueOf(s);
 
-		game_service game = Game_Server.getServer(scenario_num);
 
-		
+		try {
+			game_service g = Game_Server.getServer(scenario_num);
+		}catch(Exception e) {
+			JOptionPane.showInputDialog("you are trying to play in a level above yours!");
+
+		}
+		game_service game = Game_Server.getServer(scenario_num);
 		String g = game.getGraph();
-		//List<String> fruits = game.getFruits();
 		gameGraph = new DGraph();
 		gameGraph.init(g);
 		//init(game);
@@ -134,14 +135,13 @@ public class Ex4_Client implements Runnable{
 		game.startGame();
 		gui.setIsRunning(true);
 		gui.setLevel(scenario_num);
-		gui.setMap(gameServer.get_data());
 		System.out.println(gameServer.get_data());
 
 
 
 
 		//int ind=0;
-		long dt=50;
+		long dt=100;
 		int jj = 0;
 
 
@@ -152,7 +152,7 @@ public class Ex4_Client implements Runnable{
 			try {
 				List<String> stat = game.getRobots();
 				for(int i=0;i<stat.size();i++) {
-					System.out.println(jj+") "+stat.get(i));
+					//System.out.println(jj+") "+stat.get(i));
 				}
 				//ind++;
 				Thread.sleep(dt);
@@ -165,11 +165,19 @@ public class Ex4_Client implements Runnable{
 
 
 
+		SimpleDB.findUserName();
+		
+
+		KML_Logger kmlfile = new KML_Logger(scenario_num, gameGraph, robots, fruits, game);
 		String res = game.toString();
-		String remark = "This string should be a KML file!!";
+		String remark = kmlfile.getKMLFile();
 		game.sendKML(remark); // Should be your KML (will not work on case -1).
 		System.out.println(res);
+
+
+
 	}
+
 	/** 
 	 * Moves each of the robots along the edge, 
 	 * in case the robot is on a node the next destination (next edge) is chosen (randomly).
@@ -179,12 +187,6 @@ public class Ex4_Client implements Runnable{
 	 */
 	private static void moveRobots(game_service game, graph graph) {
 		List<String> log = game.move();
-//		ArrayList<Point3D> rs = new ArrayList<Point3D>();
-//		List<String> fs =  game.getFruits();
-
-
-
-
 
 		if(log!=null) {
 			long t = game.timeToEnd();
@@ -205,8 +207,8 @@ public class Ex4_Client implements Runnable{
 				int dest = robot.get_dest();
 				Point3D pos = robot.get_pos();
 				robots.get(i).set_pos(pos);
-				//robots.get(i).initFromJson(robot_json);
-				robots.get(i).set_pos(pos);
+
+
 				//if it is automatic
 				if(gui.getState()==1) {
 
@@ -231,61 +233,13 @@ public class Ex4_Client implements Runnable{
 						game.chooseNextEdge(rid, d);
 					}
 				}//else if
-				
+
 				updateSrc();
 			}//for
 
 			updateFruites(game);
-			//catch (JSONException e) {e.printStackTrace();}
 		}
 	}
-
-
-
-	/**
-	 * a very simple random walk implementation!
-	 * @param g
-	 * @param src
-	 * @return
-	 */
-	private static int nextNode(graph g, int src) {
-		int ans = -1;
-		Collection<edge_data> ee = g.getE(src);
-		Iterator<edge_data> itr = ee.iterator();
-		int s = ee.size();
-		int r = (int)(Math.random()*s);
-		int i=0;
-		while(i<r) {itr.next();i++;}
-		ans = itr.next().getDest();
-		return ans;
-	}
-
-
-//	private void init(game_service game) {
-//
-//		String g = game.getGraph();
-//		List<String> fruits = game.getFruits();
-//		DGraph gg = new DGraph();
-//		gg.init(g);
-//
-//		String info = game.toString();
-//		JSONObject line;
-//		try {
-//			line = new JSONObject(info);
-//			JSONObject ttt = line.getJSONObject("GameServer");
-//			int rs = ttt.getInt("robots");
-//			System.out.println(info);
-//			// the list of fruits should be considered in your solution
-//			Iterator<String> f_iter = game.getFruits().iterator();
-//			while(f_iter.hasNext()) {System.out.println(f_iter.next());}	
-//			int src_node = 0;  // arbitrary node, you should start at one of the fruits
-//			for(int a = 0;a<rs;a++) {
-//				game.addRobot(a);
-//			}
-//		}
-//		catch (JSONException e) {e.printStackTrace();}
-//
-//	}
 
 	/**
 	 * Pop up window to determine which scenario the client wants
@@ -316,8 +270,8 @@ public class Ex4_Client implements Runnable{
 		}//for
 
 	}//updateFruites
-	
-	
+
+
 	/**
 	 * This function 
 	 */

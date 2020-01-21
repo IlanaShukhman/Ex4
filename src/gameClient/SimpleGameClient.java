@@ -110,7 +110,6 @@ public class SimpleGameClient {
 		game.startGame();
 		gui.setIsRunning(true);
 		gui.setLevel(scenario_num);
-		gui.setMap(gameServer.get_data());
 		System.out.println(gameServer.get_data());
 
 
