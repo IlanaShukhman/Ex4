@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -131,7 +132,7 @@ public class Ex4_Client implements Runnable{
 			System.out.println(r);
 		}//for
 
-		gui=new MyGameGUI(gameGraph, robots, fruits);
+		gui=new MyGameGUI(gameGraph, robots, fruits, id, scenario_num);
 		game.startGame();
 		gui.setIsRunning(true);
 		gui.setLevel(scenario_num);
@@ -147,7 +148,6 @@ public class Ex4_Client implements Runnable{
 
 		while(game.isRunning()) {
 			moveRobots(game, gameGraph);
-
 
 			try {
 				List<String> stat = game.getRobots();
@@ -165,7 +165,7 @@ public class Ex4_Client implements Runnable{
 
 
 
-		SimpleDB.findUserName();
+
 		
 
 		KML_Logger kmlfile = new KML_Logger(scenario_num, gameGraph, robots, fruits, game);

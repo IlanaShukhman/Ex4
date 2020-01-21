@@ -106,7 +106,7 @@ public class SimpleGameClient {
 			System.out.println(r);
 		}//for
 
-		gui=new MyGameGUI(gameGraph, robots, fruits);
+		gui=new MyGameGUI(gameGraph, robots, fruits, 0, 0);
 		game.startGame();
 		gui.setIsRunning(true);
 		gui.setLevel(scenario_num);

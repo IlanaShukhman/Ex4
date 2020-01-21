@@ -70,8 +70,6 @@ class Ex3_AlgoTest {
 		}//for
 
 
-		MyGameGUI gui=new MyGameGUI(gameGraph, new ArrayList<>(), new ArrayList<>());
-
 		Fruit_Client fruit= fruits.get(0);
 		
 		Ex3_Algo a=new Ex3_Algo();

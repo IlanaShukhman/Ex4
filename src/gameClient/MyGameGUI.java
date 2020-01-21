@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -38,14 +39,16 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 
 	private List<Robot_Client> robots;
 	private List<Fruit_Client> fruits;
-	
+
 	//Game information
 	private int moves;
 	private double score;
 	private long timeToEnd;
 	private int level;
 	private boolean isRunning;
-
+	private int id;
+	private int place;
+	private HashMap<Integer, HashMap<Integer, Integer>>log;
 	//This is used to determine if it is automatic or manual
 	private int state;
 	private Robot_Client selectedRobot;
@@ -58,10 +61,10 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 	 * Constructors
 	 */
 	public MyGameGUI(){
-		this(new DGraph(),new ArrayList<Robot_Client>(), new ArrayList<Fruit_Client>());
+		this(new DGraph(),new ArrayList<Robot_Client>(), new ArrayList<Fruit_Client>(), 0, 0);
 	}
 
-	public MyGameGUI(DGraph g, List<Robot_Client> robots,List<Fruit_Client> fruits){
+	public MyGameGUI(DGraph g, List<Robot_Client> robots,List<Fruit_Client> fruits, int id, int level){
 		width=1000;
 		height=600;
 		this.graph=g;
@@ -76,10 +79,13 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 		this.fruits=fruits;
 
 		this.score=0;
-		this.level=0;
+		this.level=level;
 		this.timeToEnd=0;
 		this.isRunning=false;
 		this.moves=0;
+		this.id=id;
+		this.log=SimpleDB.getLog();
+		this.place = placeNum();
 
 		StdDraw.setCanvasSize(width, height);	
 		this.state=JOptionPane.showConfirmDialog(this, "Manual?");
@@ -268,7 +274,19 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 		StdDraw.text(50.0, 570.0 , "Level: "+Double.toString(this.level));
 		StdDraw.text(140.0, 570.0 , "Time: "+Double.toString(this.timeToEnd));
 		StdDraw.text(340.0, 570.0 , "Moves: "+Double.toString(this.moves));
+		StdDraw.text(500.0, 570.0 , "Your place in class: "+Double.toString(place));
+		StdDraw.text(700.0, 570.0 , "Best Score: " + log.get(id).get(level));
 	}//drawScore
+
+	private int placeNum() {
+		int myScore = log.get(id).get(level);
+		int counter = 1;
+		for(Integer ID : log.keySet()) {
+			if(log.get(ID).get(level)>myScore)
+				counter++;
+		}
+		return counter;
+	}
 
 	/**
 	 * Finding the limits of x coordinate for Screen creator
@@ -327,6 +345,8 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 		Range ry=new Range(min,max);
 		return ry;
 	}//rangeY
+
+
 
 
 	@Override
@@ -434,17 +454,6 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 	public void actionPerformed(ActionEvent e) {
 
 	}
-
-
-	public static void main(String[] a) {
-		int scenario_num = 2;
-		game_service game = Game_Server.getServer(scenario_num);
-		String g = game.getGraph();
-		DGraph gameGraph = new DGraph();
-		gameGraph.init(g);
-		MyGameGUI gui=new MyGameGUI(gameGraph, new ArrayList<>(), new ArrayList<>());
-	}
-
 
 }
 
