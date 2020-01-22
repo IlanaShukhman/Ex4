@@ -42,19 +42,26 @@ public class Automatic_Movement {
 	 * @return
 	 */
 	public int nextNodeAuto(graph g, int src,Robot_Client robot) {	
+		if(robot.get_id()==1)
+			return src;
 		Fruit_Client close_fruit=choose_Close_Fruites(robot,g);
 		Ex3_Algo algo=new Ex3_Algo();
 		close_fruit.setEdge(algo.fetchFruitToEdge(close_fruit, g));
 
 		g_algo=new Graph_Algo(g);
 		List<node_data> path=g_algo.shortestPath(src, close_fruit.getEdge().getSrc());
-		//List<node_data> path=g_algo.BFS_PATH(src, close_fruit.getEdge().getSrc());
+		
+		
+		
 		if(path.size()==1)
-			close_fruit.getEdge().setTag(0);
+			return close_fruit.getEdge().getDest();
+		
+		
 		path.add(g.getNode(close_fruit.getEdge().getDest()));
 		int dest=path.get(1).getKey();
 		g.getNode(dest).setInfo(String.valueOf(src));
 		robot.setTarget(close_fruit);
+		
 		return dest;
 	}
 

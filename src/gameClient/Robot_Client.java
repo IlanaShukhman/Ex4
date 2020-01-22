@@ -1,3 +1,4 @@
+
 package gameClient;
 
 import org.json.JSONObject;
@@ -21,23 +22,43 @@ public class Robot_Client {
 	private int _dest;
 	private double _speed;
 	private Fruit_Client target;
+	private double pathLength;
 
 	/**
 	 * Constructors:
 	 */
 	public Robot_Client(){
+		this.pathLength=0;
 	}
 
-	public Robot_Client(int _id, Point3D _pos, double _value, int _src, int _dest, double _speed) {
+	
+
+	public Robot_Client(Point3D _pos, double _value, int _src, int _dest, double _speed) {
 		super();
-		this._id = _id;
 		this._pos = _pos;
 		this._value = _value;
 		this._src = _src;
 		this._dest = _dest;
 		this._speed = _speed;
 	}
-
+	/**
+	 * Updating the necessary things
+	 * @param is
+	 * @param pos
+	 * @param value
+	 * @param speed
+	 */
+	public void update(Point3D pos,double value,double speed,int src)
+	{
+		this._src=src;
+		this._pos=pos;
+		this._value=value;
+		this._speed=speed;
+	}//update
+	/**
+	 * Parsing all the information from json
+	 * @param json
+	 */
 	public void initFromJson(String json)
 	{
 		try {
@@ -61,6 +82,13 @@ public class Robot_Client {
 	 * Getters & Setters:
 	 * @return
 	 */
+	public double getPathLength() {
+		return pathLength;
+	}
+
+	public void setPathLength(double pathLength) {
+		this.pathLength = pathLength;
+	}
 	public int get_id() {
 		return _id;
 	}

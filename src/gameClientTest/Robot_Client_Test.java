@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import gameClient.Fruit_Client;
 import gameClient.Robot_Client;
 import utils.Point3D;
 
@@ -16,7 +15,7 @@ class Robot_Client_Test {
 		Robot_Client ACTUAL=new Robot_Client();
 		ACTUAL.initFromJson(str);
 		Point3D p=new Point3D(35.19597880064568,32.10154696638656,0.0);
-		Robot_Client EXPECTED=new Robot_Client(0,p, 0,9, -1, 1);
+		Robot_Client EXPECTED=new Robot_Client(p, 0,9, -1, 1);
 		assertEquals(ACTUAL.toString(),EXPECTED.toString(), "ERR: Didn't return true when the fruits are the same");
 		
 	}
@@ -24,7 +23,7 @@ class Robot_Client_Test {
 	@Test
 	final void testToJSON() {
 		Point3D p=new Point3D(35.19597880064568,32.10154696638656,0.0);
-		Robot_Client EXPECTED=new Robot_Client(0, p, 0,9, -1, 1);
+		Robot_Client EXPECTED=new Robot_Client(p, 0,9, -1, 1);
 		String str=EXPECTED.toJSON();
 		Robot_Client ACTUAL=new Robot_Client();
 		ACTUAL.initFromJson(str);

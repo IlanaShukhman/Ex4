@@ -4,9 +4,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 /**
  * This class represents a simple example of using MySQL Data-Base.
  * Use this example for writing solution. 
@@ -18,6 +16,7 @@ public class SimpleDB {
 	public static final String jdbcUser="student";
 	public static final String jdbcUserPassword="OOP2020student";
 	public static HashMap<Integer, HashMap<Integer, Integer>> log;
+	public static HashMap<Integer, Integer> num;
 
 	/**
 	 * Simple main for demonstrating the use of the Data-base
@@ -48,12 +47,43 @@ public class SimpleDB {
 			while(resultSet.next()){
 				int id = resultSet.getInt("UserID");
 				int level = resultSet.getInt("levelID");
+				int moves = resultSet.getInt("moves");
+				int score = resultSet.getInt("score");
+
+				System.out.println("Id: " + id +", level: "+ level +", moves: "+ moves +", score: "+score);
+			}
+			resultSet.close();
+			statement.close();		
+			connection.close();		
+		}
+
+		catch (SQLException sqle) {
+			System.out.println("SQLException: " + sqle.getMessage());
+			System.out.println("Vendor Error: " + sqle.getErrorCode());
+			sqle.printStackTrace();
+		}
+		catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void makeLog() {
+		log = new HashMap<>();
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection connection = 
+					DriverManager.getConnection(jdbcUrl, jdbcUser, jdbcUserPassword);
+			Statement statement = connection.createStatement();
+			String allCustomersQuery = "SELECT * FROM Logs;";
+			ResultSet resultSet = statement.executeQuery(allCustomersQuery);
+
+			while(resultSet.next()){
+				int id = resultSet.getInt("UserID");
+				int level = resultSet.getInt("levelID");
 				if(level < 0)
 					continue;
 				int moves = resultSet.getInt("moves");
 				int score = resultSet.getInt("score");
-				//System.out.println("Id: " + id +", level: "+ level +", moves: "+ moves +", score: "+score);
-
 
 				int movesToPass;
 				if(level == 0)
@@ -120,15 +150,64 @@ public class SimpleDB {
 		catch (SQLException sqle) {
 			System.out.println("SQLException: " + sqle.getMessage());
 			System.out.println("Vendor Error: " + sqle.getErrorCode());
+			sqle.printStackTrace();
 		}
 		catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
 	
+	public static void countGames() {
+		num = new HashMap<>();
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection connection = 
+					DriverManager.getConnection(jdbcUrl, jdbcUser, jdbcUserPassword);
+			Statement statement = connection.createStatement();
+			String allCustomersQuery = "SELECT * FROM Logs;";
+			ResultSet resultSet = statement.executeQuery(allCustomersQuery);
+
+			while(resultSet.next()){
+				int id = resultSet.getInt("UserID");
+	
+				//if the id doesn't exist
+				if(!num.containsKey(id)) {
+					num.put(id, 1);
+				}
+				
+				//if the id exists in the HashMap
+				else {
+					int count = num.get(id);
+					num.replace(id, count+1);
+				}
+
+
+
+			}
+			resultSet.close();
+			statement.close();		
+			connection.close();		
+		}
+
+		catch (SQLException sqle) {
+			System.out.println("SQLException: " + sqle.getMessage());
+			System.out.println("Vendor Error: " + sqle.getErrorCode());
+			sqle.printStackTrace();
+		}
+		catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
 	public static HashMap<Integer, HashMap<Integer, Integer>> getLog(){
-		printLog();
+		makeLog();
 		return log;
+	}
+	
+	public static HashMap<Integer, Integer> getNumOfGames(){
+		countGames();
+		return num;
 	}
 	/**
 	 * this function returns the KML string as stored in the database (userID, level);
@@ -152,8 +231,9 @@ public class SimpleDB {
 		}
 
 		catch (SQLException sqle) {
-			System.out.println("SQLException: " + sqle.getMessage());
-			System.out.println("Vendor Error: " + sqle.getErrorCode());
+//			System.out.println("SQLException: " + sqle.getMessage());
+//			System.out.println("Vendor Error: " + sqle.getErrorCode());
+			sqle.printStackTrace();
 		}
 
 		catch (ClassNotFoundException e) {
@@ -183,6 +263,7 @@ public class SimpleDB {
 		catch (SQLException sqle) {
 			System.out.println("SQLException: " + sqle.getMessage());
 			System.out.println("Vendor Error: " + sqle.getErrorCode());
+			sqle.printStackTrace();
 		}
 
 		catch (ClassNotFoundException e) {
@@ -191,38 +272,6 @@ public class SimpleDB {
 		return ans;
 	}
 
-	public static void findUserName(){
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-
-			Connection connection = 
-					DriverManager.getConnection(jdbcUrl, jdbcUser, jdbcUserPassword);		
-
-			Statement stmt = connection.createStatement();
-			int id = 206333650;
-			String query = "SELECT * FROM Users where userID="+id+";";
-
-
-			ResultSet rs = stmt.executeQuery(query);
-			System.out.println("Names for query "+query+" are");
-
-			while (rs.next()) {
-				String name = rs.getString("userID");
-				System.out.print(name+"  ");
-			}
-			System.out.println();
-
-		}
-
-		catch (SQLException sqle) {
-			System.out.println("SQLException: " + sqle.getMessage());
-			System.out.println("Vendor Error: " + sqle.getErrorCode());
-			sqle.printStackTrace();
-		}
-
-		catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
+	
 }
 

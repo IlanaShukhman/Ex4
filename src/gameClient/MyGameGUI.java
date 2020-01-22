@@ -49,8 +49,12 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 	private int id;
 	private int place;
 	private HashMap<Integer, HashMap<Integer, Integer>>log;
+	private HashMap<Integer, Integer> numOfGame;
+	
+	
 	//This is used to determine if it is automatic or manual
 	private int state;
+	
 	private Robot_Client selectedRobot;
 	private int selectedNode;
 
@@ -85,6 +89,7 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 		this.moves=0;
 		this.id=id;
 		this.log=SimpleDB.getLog();
+		this.numOfGame=SimpleDB.getNumOfGames();
 		this.place = placeNum();
 
 		StdDraw.setCanvasSize(width, height);	
@@ -275,7 +280,8 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 		StdDraw.text(140.0, 570.0 , "Time: "+Double.toString(this.timeToEnd));
 		StdDraw.text(340.0, 570.0 , "Moves: "+Double.toString(this.moves));
 		StdDraw.text(500.0, 570.0 , "Your place in class: "+Double.toString(place));
-		StdDraw.text(700.0, 570.0 , "Best Score: " + log.get(id).get(level));
+		StdDraw.text(650.0, 570.0 , "Best Score: " + log.get(id).get(level));
+		StdDraw.text(840.0, 570.0 , "Number of games played: " + numOfGame.get(id));
 	}//drawScore
 
 	private int placeNum() {

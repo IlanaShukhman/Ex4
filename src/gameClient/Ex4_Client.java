@@ -101,6 +101,7 @@ public class Ex4_Client implements Runnable{
 
 		// update and displaying the fruites
 		int numFruits = gameServer.get_fruits_number();
+
 		for (int i = 0; i < numFruits; i++) {
 			Fruit_Client fruit=new Fruit_Client();
 			fruit.initFromJson(game.getFruits().get(i));
@@ -123,7 +124,7 @@ public class Ex4_Client implements Runnable{
 		System.out.println(fruits.toString());
 
 
-		for(int i = 0;i<numRobots;i++) {
+		for(int i = 0; i<numRobots;i++) {
 			game.addRobot(fruits.get(i).getEdge().getSrc());
 			Robot_Client r=new Robot_Client();
 			r.initFromJson(game.getRobots().get(i));
@@ -142,11 +143,12 @@ public class Ex4_Client implements Runnable{
 
 
 		//int ind=0;
-		long dt=100;
+		long dt=150;
 		int jj = 0;
 
 
 		while(game.isRunning()) {
+
 			moveRobots(game, gameGraph);
 
 			try {
@@ -166,14 +168,13 @@ public class Ex4_Client implements Runnable{
 
 
 
-		
 
-		KML_Logger kmlfile = new KML_Logger(scenario_num, gameGraph, robots, fruits, game);
-		String res = game.toString();
-		String remark = kmlfile.getKMLFile();
-		game.sendKML(remark); // Should be your KML (will not work on case -1).
-		System.out.println(res);
 
+		//		KML_Logger kmlfile = new KML_Logger(scenario_num, gameGraph, robots, fruits, game);
+		//		String res = game.toString();
+		//		String remark = kmlfile.getKMLFile();
+		//		game.sendKML(remark); // Should be your KML (will not work on case -1).
+		//		System.out.println(res);
 
 
 	}
@@ -186,6 +187,7 @@ public class Ex4_Client implements Runnable{
 	 * @param log
 	 */
 	private static void moveRobots(game_service game, graph graph) {
+
 		List<String> log = game.move();
 
 		if(log!=null) {
@@ -211,7 +213,6 @@ public class Ex4_Client implements Runnable{
 
 				//if it is automatic
 				if(gui.getState()==1) {
-
 					Automatic_Movement am = new Automatic_Movement(g_algo, fruits, robots);
 					dest = am.nextNodeAuto(graph, src, robots.get(i));
 					robot.set_dest(dest);	
@@ -235,9 +236,8 @@ public class Ex4_Client implements Runnable{
 				}//else if
 
 				updateSrc();
+				updateFruites(game);
 			}//for
-
-			updateFruites(game);
 		}
 	}
 
@@ -267,14 +267,12 @@ public class Ex4_Client implements Runnable{
 			Fruit_Client fruit=new Fruit_Client();
 			fruit.initFromJson(fruitInformation.get(i));
 			fruits.get(i).set_pos(fruit.getLocation());
-		}//for
+		}//for 
 
 	}//updateFruites
 
 
-	/**
-	 * This function 
-	 */
+	
 	private static void updateSrc() {
 		for(Robot_Client robot: robots) {
 			for(Integer node : gameGraph.get_Node_Hash().keySet()) {
