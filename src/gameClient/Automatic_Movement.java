@@ -80,12 +80,12 @@ public class Automatic_Movement {
 		double innerDist=g.getNode(target.getEdge().getSrc()).getLocation().distance2D(target.getLocation());
 		double wholeDist=g.getNode(target.getEdge().getSrc()).getLocation().distance2D(g.getNode(target.getEdge().getDest()).getLocation());
 		double porportion=(innerDist*wholeDist)*target.getValue();
-		double min= (g_algo.shortestPathDist(src,target.getEdge().getSrc())+porportion)/target.getValue();
+		double min= (g_algo.shortestPathDist(src,target.getEdge().getSrc())+porportion);
 		for (Fruit_Client fruit : fruits) {
 			innerDist=g.getNode(fruit.getEdge().getSrc()).getLocation().distance2D(fruit.getLocation());
 			wholeDist=g.getNode(fruit.getEdge().getSrc()).getLocation().distance2D(g.getNode(fruit.getEdge().getDest()).getLocation());
 			porportion=(innerDist*wholeDist)*fruit.getValue();
-			shortestpath=(g_algo.shortestPathDist(src,fruit.getEdge().getSrc())+porportion)/fruit.getValue();
+			shortestpath=(g_algo.shortestPathDist(src,fruit.getEdge().getSrc())+porportion);
 			if(alreadyTargeted(fruit)==-1 && min>shortestpath)
 			{		
 					min=shortestpath;

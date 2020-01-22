@@ -1,11 +1,14 @@
 package gameClient;
 
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -100,7 +103,6 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 
 		Thread t=new Thread(this);
 		t.start();
-
 	}//Graph_GUI
 
 	
@@ -141,7 +143,10 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 	public Robot_Client getSelectedRobot() {
 		return this.selectedRobot;
 	}
-
+	public int getLevel()
+	{
+		return this.level;
+	}
 	/**
 	 * Private functions to change from map coordinates to pixels.
 	 */
@@ -271,8 +276,7 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 	 */
 	private void drawEndFrame() {
 		StdDraw.setPenColor(Color.RED);
-		StdDraw.text(497, 497, "Game Over!");
-
+		
 	}
 
 	/**

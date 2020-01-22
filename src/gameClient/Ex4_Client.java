@@ -1,5 +1,8 @@
 package gameClient;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -152,17 +155,43 @@ public class Ex4_Client implements Runnable{
 		}
 
 		gui.setIsRunning(false);
+		int check=JOptionPane.showConfirmDialog(null, "Do you want to see your steps on Google Earth App?\nPrerequist:Google-Earth app.");
+		if(check==0)
+			openKML();
 
 
 
+				KML_Logger kmlfile = new KML_Logger(scenario_num, gameGraph, robots, fruits, game);
+				String res = game.toString();
+				String remark = kmlfile.getKMLFile();
+				game.sendKML(remark); // Should be your KML (will not work on case -1).
+				System.out.println(res);
 
-		//		KML_Logger kmlfile = new KML_Logger(scenario_num, gameGraph, robots, fruits, game);
-		//		String res = game.toString();
-		//		String remark = kmlfile.getKMLFile();
-		//		game.sendKML(remark); // Should be your KML (will not work on case -1).
-		//		System.out.println(res);
 
-
+	}
+/**
+ * Opening KML format
+ */
+	private void openKML() {
+		String path="data/"+String.valueOf(gui.getLevel())+".kml";
+		File file = new File(path);
+        
+        //first check if Desktop is supported by Platform or not
+        if(!Desktop.isDesktopSupported()){
+            System.out.println("Desktop is not supported");
+            return;
+        }
+        
+        Desktop desktop = Desktop.getDesktop();
+        if(file.exists())
+			try {
+				desktop.open(file);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		
 	}
 
 	/** 
