@@ -67,7 +67,7 @@ public class Automatic_Movement {
 	}
 
 	/**
-	 * Choosing the fruit with the lowest distanse and highest value by proportion 
+	 * Choosing the fruit with the lowest distance and highest value by proportion 
 	 * @param robot
 	 * @param g
 	 * @return
@@ -77,9 +77,15 @@ public class Automatic_Movement {
 		double shortestpath=0;
 		g_algo=new Graph_Algo(g);
 		Fruit_Client target=robot.getTarget();
-		double min= ((g_algo.shortestPathDist(src,target.getEdge().getSrc())));
+		double innerDist=g.getNode(target.getEdge().getSrc()).getLocation().distance2D(target.getLocation());
+		double wholeDist=g.getNode(target.getEdge().getSrc()).getLocation().distance2D(g.getNode(target.getEdge().getDest()).getLocation());
+		double porportion=(innerDist*wholeDist)*target.getValue();
+		double min= (g_algo.shortestPathDist(src,target.getEdge().getSrc())+porportion)/target.getValue();
 		for (Fruit_Client fruit : fruits) {
-			shortestpath=(double)(g_algo.shortestPathDist(src,fruit.getEdge().getSrc()));
+			innerDist=g.getNode(fruit.getEdge().getSrc()).getLocation().distance2D(fruit.getLocation());
+			wholeDist=g.getNode(fruit.getEdge().getSrc()).getLocation().distance2D(g.getNode(fruit.getEdge().getDest()).getLocation());
+			porportion=(innerDist*wholeDist)*fruit.getValue();
+			shortestpath=(g_algo.shortestPathDist(src,fruit.getEdge().getSrc())+porportion)/fruit.getValue();
 			if(alreadyTargeted(fruit)==-1 && min>shortestpath)
 			{		
 					min=shortestpath;

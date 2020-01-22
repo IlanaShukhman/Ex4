@@ -130,13 +130,20 @@ public class Ex4_Client implements Runnable{
 		gui.setLevel(scenario_num);
 		System.out.println(gameServer.get_data());
 
-		long dt=55;
+		long dt=0;
 
 
 		while(game.isRunning()) {
 			moveRobots(game, gameGraph);
 			updateFruites(game);
 			updateSrc();	
+			double sumSpeed = robots.get(0).get_speed()+robots.get(1).get_speed()+robots.get(2).get_speed();
+			if(sumSpeed<8)
+				dt=200;
+			else if(sumSpeed<13)
+				dt=80;
+			else
+				dt=30;
 			try {
 				Thread.sleep(dt);
 			} catch (InterruptedException e) {
