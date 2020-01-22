@@ -117,15 +117,10 @@ public class SimpleGameClient {
 		
 		KML_Logger kmlFile=new KML_Logger(scenario_num, gameGraph, robots, fruits, game);
 		
-		
-		
-		
-		
-		
-		
 		try {
 			while(game.isRunning()) {
 				moveRobots(game, gameGraph);
+				Thread.sleep(97);
 			}//while
 		}
 		catch(Exception e) {
@@ -169,13 +164,13 @@ public class SimpleGameClient {
 				int dest = robot.get_dest();
 				Point3D pos = robot.get_pos();
 				robots.get(i).set_pos(pos);
+				robots.get(i).set_src(src);
 				//robots.get(i).initFromJson(robot_json);
-				robots.get(i).set_pos(pos);
 				//if it is automatic
 				if(gui.getState()==1) {
 
 					Automatic_Movement am = new Automatic_Movement(g_algo, fruits, robots);
-					dest = am.nextNodeAuto(graph, src, robots.get(i));
+					dest = am.nextNodeAuto(graph, src, robots.get(i),gameServer.get_fruits_number());
 					robot.set_dest(dest);	
 					game.chooseNextEdge(rid, dest);
 				}//if
@@ -193,8 +188,10 @@ public class SimpleGameClient {
 						}
 						int d = mm.nextNodeManual(src, robots.get(i).get_dest());
 						game.chooseNextEdge(rid, d);
-					}
+					}//if
 				}//else if
+				updateSrc();
+				
 			}//for
 			
 			updateFruites(game);
@@ -232,5 +229,21 @@ public class SimpleGameClient {
 		}//for
 
 	}//updateFruites
+	private static void updateSrc() {
+		for(Robot_Client robot: robots) {
+			for(Integer node : gameGraph.get_Node_Hash().keySet()) {
+				if(isClose(robot.get_pos(), gameGraph.getNode(node).getLocation())){
+					robot.set_src(node);
+				}
+			}
+		}
+
+	}
+
+	private static boolean isClose(Point3D node1, Point3D node2) {
+		if(node1.distance2D(node2)<0.0005)
+			return true;
+		return false;
+	}
 
 }

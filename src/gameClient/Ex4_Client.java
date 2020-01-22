@@ -55,8 +55,9 @@ public class Ex4_Client implements Runnable{
 	@Override
 	public void run() {
 
-		String getID=JOptionPane.showInputDialog(this, "Type in your ID:");
-		int id = Integer.valueOf(getID);
+		//String getID=JOptionPane.showInputDialog(this, "Type in your ID:");
+//		int id = Integer.valueOf(getID);
+		int id=206333650;
 		Game_Server.login(id);
 
 		//Create Graph
@@ -78,30 +79,20 @@ public class Ex4_Client implements Runnable{
 		String g = game.getGraph();
 		gameGraph = new DGraph();
 		gameGraph.init(g);
-		//init(game);
-
 		game.startGame();
-
 		//Create the lists of robots and fruits
 		robots=new ArrayList<Robot_Client>();
 		fruits=new ArrayList<Fruit_Client>();
-
-
-
 		//Game Server information such as:fruites,moves,grade,robots,graph,data
 		String info = game.toString();
 		GameServer_Client gameServer=new GameServer_Client();
 		gameServer.initFromJson(info);
 		int numRobots = gameServer.get_robots_number();
-
 		System.out.println(gameServer);
 		System.out.println(g);
-
 		Ex3_Algo ex3_alg=new Ex3_Algo();
-
 		// update and displaying the fruites
 		int numFruits = gameServer.get_fruits_number();
-
 		for (int i = 0; i < numFruits; i++) {
 			Fruit_Client fruit=new Fruit_Client();
 			fruit.initFromJson(game.getFruits().get(i));
@@ -110,7 +101,7 @@ public class Ex4_Client implements Runnable{
 			fruits.add(fruit);
 		}//for
 
-		Comparator<Fruit_Client> compare=new Comparator<Fruit_Client>() {
+		Comparator<Fruit_Client> valueOrder=new Comparator<Fruit_Client>() {
 
 			@Override
 			public int compare(Fruit_Client f1, Fruit_Client f2) {
@@ -120,17 +111,17 @@ public class Ex4_Client implements Runnable{
 		};
 
 
-		fruits.sort(compare);
+		fruits.sort(valueOrder);
 		System.out.println(fruits.toString());
 
 
 		for(int i = 0; i<numRobots;i++) {
 			game.addRobot(fruits.get(i).getEdge().getSrc());
-			Robot_Client r=new Robot_Client();
-			r.initFromJson(game.getRobots().get(i));
-			robots.add(i, r);
+			Robot_Client robot=new Robot_Client();
+			robot.initFromJson(game.getRobots().get(i));
+			robots.add(i, robot);
 			robots.get(i).setTarget(fruits.get(i));
-			System.out.println(r);
+			System.out.println(robot);
 		}//for
 
 		gui=new MyGameGUI(gameGraph, robots, fruits, id, scenario_num);
@@ -139,28 +130,17 @@ public class Ex4_Client implements Runnable{
 		gui.setLevel(scenario_num);
 		System.out.println(gameServer.get_data());
 
-
-
-
-		//int ind=0;
-		long dt=150;
-		int jj = 0;
+		long dt=55;
 
 
 		while(game.isRunning()) {
-
 			moveRobots(game, gameGraph);
-
+			updateFruites(game);
+			updateSrc();	
 			try {
-				List<String> stat = game.getRobots();
-				for(int i=0;i<stat.size();i++) {
-					//System.out.println(jj+") "+stat.get(i));
-				}
-				//ind++;
 				Thread.sleep(dt);
-				jj++;
-			}
-			catch(Exception e) {
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -194,11 +174,9 @@ public class Ex4_Client implements Runnable{
 			long t = game.timeToEnd();
 			gui.setTimeToEnd(t/1000);
 			for(int i=0;i<log.size();i++) {
-
 				String info = game.toString();
 				GameServer_Client gameServer=new GameServer_Client();
 				gameServer.initFromJson(info);
-
 				gui.setScore(gameServer.get_grade());
 				gui.setMoves(gameServer.get_number_of_moves());
 				String robot_json = log.get(i);
@@ -208,19 +186,19 @@ public class Ex4_Client implements Runnable{
 				int src = robot.get_src();
 				int dest = robot.get_dest();
 				Point3D pos = robot.get_pos();
-				robots.get(i).set_pos(pos);
-
-
 				//if it is automatic
 				if(gui.getState()==1) {
+					robots.get(i).initFromJson(robot_json);
 					Automatic_Movement am = new Automatic_Movement(g_algo, fruits, robots);
-					dest = am.nextNodeAuto(graph, src, robots.get(i));
+					dest = am.nextNodeAuto(graph, src, robots.get(i),gameServer.get_fruits_number());
 					robot.set_dest(dest);	
 					game.chooseNextEdge(rid, dest);
 				}//if
 
 				//if it is manual
 				else if(gui.getState()==0) {
+					robots.get(i).set_pos(pos);
+					robots.get(i).set_src(src);
 					robot=gui.getSelectedRobot();
 					dest=gui.getSelectedNode();
 					Manual_Movement mm = new Manual_Movement(g_algo, gameGraph, robots, fruits);
@@ -232,14 +210,11 @@ public class Ex4_Client implements Runnable{
 						}
 						int d = mm.nextNodeManual(src, robots.get(i).get_dest());
 						game.chooseNextEdge(rid, d);
-					}
-				}//else if
-
-				updateSrc();
-				updateFruites(game);
-			}//for
-		}
-	}
+					}//if
+				}//else if	
+			}//for			
+		}//if
+	}//MoveRobot
 
 	/**
 	 * Pop up window to determine which scenario the client wants
