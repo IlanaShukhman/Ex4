@@ -1,6 +1,7 @@
 package gameClient;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -91,7 +92,7 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 		this.log=SimpleDB.getLog();
 		this.numOfGame=SimpleDB.getNumOfGames();
 		this.place = placeNum();
-
+		StdDraw.setFont(new Font("Courier", Font.PLAIN, 12));
 		StdDraw.setCanvasSize(width, height);	
 		this.state=JOptionPane.showConfirmDialog(this, "Manual?");
 		this.selectedNode=-1;
@@ -102,9 +103,7 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 
 	}//Graph_GUI
 
-	public void setMoves(int numOfMoves){
-		this.moves=numOfMoves;
-	}
+	
 
 
 	/**
@@ -124,7 +123,10 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 	public void setLevel(int level) {
 		this.level = level;
 	}
-
+	public void setNumberOfMoves() {
+		this.moves++;
+		
+	}
 	/**
 	 * Getters.
 	 */
@@ -204,12 +206,13 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 			StdDraw.setPenColor(color[i]);
 			double xr=updateX(robot.get_pos().x());
 			double yr=updateY(robot.get_pos().y());
-			StdDraw.circle(xr, yr, 10);
+			//StdDraw.circle(xr, yr, 10);
+			StdDraw.picture(xr, yr, "car.png", 25, 25);
 			StdDraw.text(xr, yr-20, "Grade:"+String.valueOf(robot.get_value()));
 			StdDraw.text(xr, yr-40, "Speed:"+String.valueOf(robot.get_speed()));
 			StdDraw.text(xr, yr-60, "Target:["+robot.getTarget().getEdge().getSrc()+","+robot.getTarget().getEdge().getDest()+"]");
 			if(robot.equals(selectedRobot)){
-				StdDraw.circle(xr,yr,12);
+				StdDraw.circle(xr,yr,25);
 			}//if
 
 			i++;
@@ -228,10 +231,10 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 
 			StdDraw.text(xr,yr-20 , "Value: "+Double.toString(fruit.getValue()));
 			if(fruit.getType()==-1) {
-				StdDraw.picture(xr, yr, "banana.png", 25, 25);
+				StdDraw.picture(xr, yr, "1.png", 25, 25);
 			}
 			else if(fruit.getType()==1) {
-				StdDraw.picture(xr, yr, "apple.png", 25, 25);
+				StdDraw.picture(xr, yr, "-1.png", 25, 25);
 			}
 
 		}
@@ -268,7 +271,7 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 	 */
 	private void drawEndFrame() {
 		StdDraw.setPenColor(Color.RED);
-		StdDraw.text(497,497, "Game Is Over");
+		StdDraw.text(497, 497, "Game Over!");
 
 	}
 
@@ -347,7 +350,7 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 				min=graph.get_Node_Hash().get(node).getLocation().y();
 		}//for each
 
-		max+=0.001;
+		max+=0.003;
 		min-=0.001;
 		Range ry=new Range(min,max);
 		return ry;
@@ -461,6 +464,8 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 	public void actionPerformed(ActionEvent e) {
 
 	}
+
+	
 
 }
 

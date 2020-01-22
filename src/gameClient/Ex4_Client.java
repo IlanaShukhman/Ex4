@@ -55,9 +55,8 @@ public class Ex4_Client implements Runnable{
 	@Override
 	public void run() {
 
-		//String getID=JOptionPane.showInputDialog(this, "Type in your ID:");
-//		int id = Integer.valueOf(getID);
-		int id=206333650;
+		String getID=JOptionPane.showInputDialog(this, "Type in your ID:");
+		int id = Integer.valueOf(getID);
 		Game_Server.login(id);
 
 		//Create Graph
@@ -137,22 +136,22 @@ public class Ex4_Client implements Runnable{
 			moveRobots(game, gameGraph);
 			updateFruites(game);
 			updateSrc();	
-			double sumSpeed = robots.get(0).get_speed()+robots.get(1).get_speed()+robots.get(2).get_speed();
-			if(sumSpeed<8)
-				dt=200;
-			else if(sumSpeed<13)
-				dt=80;
-			else
-				dt=30;
+//			double sumSpeed = robots.get(0).get_speed()+robots.get(1).get_speed()+robots.get(2).get_speed();
+//			if(sumSpeed<8)
+//				dt=200;
+//			else if(sumSpeed<13)
+//				dt=80;
+//			else
+//				dt=30;
 			try {
-				Thread.sleep(dt);
+				Thread.sleep(0);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 
-
+		gui.setIsRunning(false);
 
 
 
@@ -185,7 +184,7 @@ public class Ex4_Client implements Runnable{
 				GameServer_Client gameServer=new GameServer_Client();
 				gameServer.initFromJson(info);
 				gui.setScore(gameServer.get_grade());
-				gui.setMoves(gameServer.get_number_of_moves());
+				gui.setNumberOfMoves();
 				String robot_json = log.get(i);
 				Robot_Client robot=new Robot_Client();
 				robot.initFromJson(robot_json);

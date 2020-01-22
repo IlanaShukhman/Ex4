@@ -719,9 +719,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		JMenuBar menuBar = new JMenuBar();
 		
 		JMenu menu1 = new JMenu("Save");
-		
 		menuBar.add(menu1);
-
 		
 		JMenuItem menuItem1 = new JMenuItem("Save to file");
 		
