@@ -206,7 +206,7 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 	 * This function will draw the robots on the graph.
 	 */
 	private void drawRobots() {
-		Color[] color= {Color.blue,Color.green,Color.magenta,Color.pink};
+		Color[] color= {Color.blue,Color.darkGray,Color.green,Color.magenta,Color.pink};
 		int i=0;
 		for(Robot_Client robot : robots) {
 			StdDraw.setPenColor(color[i]);

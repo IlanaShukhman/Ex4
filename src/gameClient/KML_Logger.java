@@ -27,7 +27,7 @@ public class KML_Logger implements Runnable {
 	private game_service game;
 	private int timeOfGame;
 	private String kmlfile;
-	
+
 	/**
 	 * Constructor.
 	 */
@@ -42,7 +42,7 @@ public class KML_Logger implements Runnable {
 			this.timeOfGame=60000;
 		else
 			this.timeOfGame=30000;
-		
+
 		kmlfile="";
 
 
@@ -52,7 +52,7 @@ public class KML_Logger implements Runnable {
 
 
 	}
-	
+
 	/**
 	 * This method creates the content of the kml file, and sends it to the saveToFile function.
 	 * @return
@@ -103,7 +103,7 @@ public class KML_Logger implements Runnable {
 				"</Placemark>\r\n" +  
 				"</Document>\r\n" + 
 				"</kml>\r\n";
-		
+
 		kmlfile=file;
 
 
@@ -116,8 +116,10 @@ public class KML_Logger implements Runnable {
 
 		return file;
 	}
-	
-	
+
+	/**
+	 * @return the content of the KML file.
+	 */
 	public String getKMLFile() {
 		return kmlfile;
 	}
@@ -197,7 +199,7 @@ public class KML_Logger implements Runnable {
 					"<coordinates>"+ robot.get_pos() + "</coordinates>\r\n"+  
 					"</Point>\r\n"+
 					"</Placemark>\r\n";
-			
+
 			i++;
 		}
 		return str;

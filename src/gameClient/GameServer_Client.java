@@ -51,10 +51,10 @@ public class GameServer_Client {
 			e.printStackTrace();
 		}
 	}//initFromJson
-/**
- * Getters & Setters:
- * @return
- */
+	/**
+	 * Getters & Setters:
+	 * @return
+	 */
 	public String get_data() {
 		return _data;
 	}
@@ -93,7 +93,7 @@ public class GameServer_Client {
 		String ans = "{\"GameServer\":{\"graph\":\"" + this._data + "\"," + "\"fruits\":" + this._fruits_number + "," + "\"grade\":" + this._grade + "," + "\"moves\":" + this._number_of_moves + "," + "\"robots\":" + this._robots_number + "}" + "}";
 		return ans;
 	}
-	
+
 	/**
 	 * toString using Json format:
 	 * @return

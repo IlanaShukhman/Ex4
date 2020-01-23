@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
 
 import Server.Game_Server;
 import Server.game_service;
-import algorithms.Ex3_Algo;
+import algorithms.Ex4_Algo;
 import algorithms.Graph_Algo;
 import dataStructure.DGraph;
 import dataStructure.edge_data;
@@ -92,7 +92,7 @@ public class Ex4_Client implements Runnable{
 		int numRobots = gameServer.get_robots_number();
 		System.out.println(gameServer);
 		System.out.println(g);
-		Ex3_Algo ex3_alg=new Ex3_Algo();
+		Ex4_Algo ex3_alg=new Ex4_Algo();
 		// update and displaying the fruites
 		int numFruits = gameServer.get_fruits_number();
 		for (int i = 0; i < numFruits; i++) {
@@ -237,14 +237,14 @@ public class Ex4_Client implements Runnable{
 					robots.get(i).set_src(src);
 					robot=gui.getSelectedRobot();
 					dest=gui.getSelectedNode();
-					Manual_Movement mm = new Manual_Movement(g_algo, gameGraph, robots, fruits);
+					Manual_Movement mm = new Manual_Movement(g_algo, gameGraph, robots);
 
 					//after the user clicked 
 					if(robot!=null && dest!=-1) {
 						if(mm.okayToGo(dest)) {
 							robot.set_dest(dest);		
 						}
-						int d = mm.nextNodeManual(src, robots.get(i).get_dest());
+						int d = mm.nextNodeManual(src, robots.get(i).get_dest(),i);
 						game.chooseNextEdge(rid, d);
 					}//if
 				}//else if	
