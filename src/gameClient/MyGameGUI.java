@@ -210,39 +210,39 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 		int i=0;
 		for(Robot_Client robot : robots) {
 			StdDraw.setPenColor(color[i]);
-			List<node_data> robotPath=robot.getPath();
-			double x0=0;
-			double y0=0;
-			double x1=0;
-			double y1=0;
-			for (int j = 1; j < robotPath.size(); j++) {
-				if(j==1)
-				{
-				x0=updateX(robot.get_pos().x());
-				y0=updateY(robot.get_pos().y());
-				x1=updateX(robotPath.get(j).getLocation().x());
-				y1=updateY(robotPath.get(j).getLocation().y());
-				if(pointOnEdge(robotPath.get(j-1).getLocation(), robotPath.get(j).getLocation(), robot.get_pos()))
-					StdDraw.line(x0, y0, x1, y1);	
-				}//if
-				else if(j==robotPath.size()-1 && pointOnEdge(robotPath.get(j-1).getLocation(), robotPath.get(j).getLocation(), robot.getTarget().getLocation()))
-				{
-					x0=updateX(robotPath.get(j-1).getLocation().x());
-					y0=updateY(robotPath.get(j-1).getLocation().y());
-					x1=updateX(robot.getTarget().getLocation().x());
-					y1=updateY(robot.getTarget().getLocation().y());
-						StdDraw.line(x0, y0, x1, y1);	
-				}//else if
-				else 
-				{
-					x0=updateX(robotPath.get(j-1).getLocation().x());
-					y0=updateY(robotPath.get(j-1).getLocation().y());
-					x1=updateX(robotPath.get(j).getLocation().x());
-					y1=updateY(robotPath.get(j).getLocation().y());
-					StdDraw.line(x0, y0, x1, y1);
-				}
-						
-			}//for
+//			List<node_data> robotPath=robot.getPath();
+//			double x0=0;
+//			double y0=0;
+//			double x1=0;
+//			double y1=0;
+//			for (int j = 1; j < robotPath.size(); j++) {
+//				if(j==1)
+//				{
+//				x0=updateX(robot.get_pos().x());
+//				y0=updateY(robot.get_pos().y());
+//				x1=updateX(robotPath.get(j).getLocation().x());
+//				y1=updateY(robotPath.get(j).getLocation().y());
+//				if(pointOnEdge(robotPath.get(j-1).getLocation(), robotPath.get(j).getLocation(), robot.get_pos()))
+//					StdDraw.line(x0, y0, x1, y1);	
+//				}//if
+//				else if(j==robotPath.size()-1 && pointOnEdge(robotPath.get(j-1).getLocation(), robotPath.get(j).getLocation(), robot.getTarget().getLocation()))
+//				{
+//					x0=updateX(robotPath.get(j-1).getLocation().x());
+//					y0=updateY(robotPath.get(j-1).getLocation().y());
+//					x1=updateX(robot.getTarget().getLocation().x());
+//					y1=updateY(robot.getTarget().getLocation().y());
+//						StdDraw.line(x0, y0, x1, y1);	
+//				}//else if
+//				else 
+//				{
+//					x0=updateX(robotPath.get(j-1).getLocation().x());
+//					y0=updateY(robotPath.get(j-1).getLocation().y());
+//					x1=updateX(robotPath.get(j).getLocation().x());
+//					y1=updateY(robotPath.get(j).getLocation().y());
+//					StdDraw.line(x0, y0, x1, y1);
+//				}
+//						
+//			}//for
 		
 			double xr=updateX(robot.get_pos().x());
 			double yr=updateY(robot.get_pos().y());

@@ -3,12 +3,8 @@ package gameClient;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -21,6 +17,7 @@ import dataStructure.DGraph;
 import dataStructure.edge_data;
 import dataStructure.graph;
 import utils.Point3D;
+
 /**
  * This class represents a simple example for using the GameServer API:
  * the main file performs the following tasks:
@@ -132,7 +129,7 @@ public class Ex4_Client implements Runnable{
 		gui.setLevel(scenario_num);
 		System.out.println(gameServer.get_data());
 
-		long dt=100;
+		long dt=0;
 
 
 		while(game.isRunning()) {
