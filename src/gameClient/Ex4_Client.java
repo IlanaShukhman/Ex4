@@ -59,21 +59,21 @@ public class Ex4_Client implements Runnable{
 		int id = Integer.valueOf(getID);
 		Game_Server.login(id);
 
-		//Create Graph
 		String s=chooseScenarioFromList();
+		
 		//if the user decided to cancel
 		if(s==null)
 			return;
 
 		int scenario_num =Integer.valueOf(s);
 
-
 		try {
 			game_service g = Game_Server.getServer(scenario_num);
 		}catch(Exception e) {
 			JOptionPane.showInputDialog("you are trying to play in a level above yours!");
-
+			return;
 		}
+		
 		game_service game = Game_Server.getServer(scenario_num);
 		String g = game.getGraph();
 		gameGraph = new DGraph();
@@ -90,6 +90,7 @@ public class Ex4_Client implements Runnable{
 		System.out.println(gameServer);
 		System.out.println(g);
 		Ex4_Algo ex3_alg=new Ex4_Algo();
+		
 		// update and displaying the fruites
 		int numFruits = gameServer.get_fruits_number();
 		for (int i = 0; i < numFruits; i++) {
@@ -136,17 +137,10 @@ public class Ex4_Client implements Runnable{
 			moveRobots(game, gameGraph);
 			updateFruites(game);
 			updateSrc();	
-//			double sumSpeed = robots.get(0).get_speed()+robots.get(1).get_speed()+robots.get(2).get_speed();
-//			if(sumSpeed<8)
-//				dt=200;
-//			else if(sumSpeed<13)
-//				dt=80;
-//			else
-//				dt=30;
+			dt=30;
 			try {
 				Thread.sleep(dt);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -164,32 +158,32 @@ public class Ex4_Client implements Runnable{
 
 
 
-	
+
 
 	}
-/**
- * Opening KML format
- */
+	/**
+	 * Opening KML format
+	 */
 	private void openKML() {
 		String path="data/"+String.valueOf(gui.getLevel())+".kml";
 		File file = new File(path);
-        
-        //first check if Desktop is supported by Platform or not
-        if(!Desktop.isDesktopSupported()){
-            System.out.println("Desktop is not supported");
-            return;
-        }
-        
-        Desktop desktop = Desktop.getDesktop();
-        if(file.exists())
+
+		//first check if Desktop is supported by Platform or not
+		if(!Desktop.isDesktopSupported()){
+			System.out.println("Desktop is not supported");
+			return;
+		}
+
+		Desktop desktop = Desktop.getDesktop();
+		if(file.exists())
 			try {
 				desktop.open(file);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		
-		
+
+
 	}
 
 	/** 
@@ -280,7 +274,7 @@ public class Ex4_Client implements Runnable{
 	}//updateFruites
 
 
-	
+
 	private static void updateSrc() {
 		for(Robot_Client robot: robots) {
 			for(Integer node : gameGraph.get_Node_Hash().keySet()) {

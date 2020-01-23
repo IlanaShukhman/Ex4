@@ -55,11 +55,11 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 	private int place;
 	private HashMap<Integer, HashMap<Integer, Integer>>log;
 	private HashMap<Integer, Integer> numOfGame;
-	
-	
+
+
 	//This is used to determine if it is automatic or manual
 	private int state;
-	
+
 	private Robot_Client selectedRobot;
 	private int selectedNode;
 
@@ -106,7 +106,7 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 		t.start();
 	}//Graph_GUI
 
-	
+
 
 
 	/**
@@ -128,7 +128,7 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 	}
 	public void setNumberOfMoves() {
 		this.moves++;
-		
+
 	}
 	/**
 	 * Getters.
@@ -210,40 +210,40 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 		int i=0;
 		for(Robot_Client robot : robots) {
 			StdDraw.setPenColor(color[i]);
-//			List<node_data> robotPath=robot.getPath();
-//			double x0=0;
-//			double y0=0;
-//			double x1=0;
-//			double y1=0;
-//			for (int j = 1; j < robotPath.size(); j++) {
-//				if(j==1)
-//				{
-//				x0=updateX(robot.get_pos().x());
-//				y0=updateY(robot.get_pos().y());
-//				x1=updateX(robotPath.get(j).getLocation().x());
-//				y1=updateY(robotPath.get(j).getLocation().y());
-//				if(pointOnEdge(robotPath.get(j-1).getLocation(), robotPath.get(j).getLocation(), robot.get_pos()))
-//					StdDraw.line(x0, y0, x1, y1);	
-//				}//if
-//				else if(j==robotPath.size()-1 && pointOnEdge(robotPath.get(j-1).getLocation(), robotPath.get(j).getLocation(), robot.getTarget().getLocation()))
-//				{
-//					x0=updateX(robotPath.get(j-1).getLocation().x());
-//					y0=updateY(robotPath.get(j-1).getLocation().y());
-//					x1=updateX(robot.getTarget().getLocation().x());
-//					y1=updateY(robot.getTarget().getLocation().y());
-//						StdDraw.line(x0, y0, x1, y1);	
-//				}//else if
-//				else 
-//				{
-//					x0=updateX(robotPath.get(j-1).getLocation().x());
-//					y0=updateY(robotPath.get(j-1).getLocation().y());
-//					x1=updateX(robotPath.get(j).getLocation().x());
-//					y1=updateY(robotPath.get(j).getLocation().y());
-//					StdDraw.line(x0, y0, x1, y1);
-//				}
-//						
-//			}//for
-		
+			//			List<node_data> robotPath=robot.getPath();
+			//			double x0=0;
+			//			double y0=0;
+			//			double x1=0;
+			//			double y1=0;
+			//			for (int j = 1; j < robotPath.size(); j++) {
+			//				if(j==1)
+			//				{
+			//				x0=updateX(robot.get_pos().x());
+			//				y0=updateY(robot.get_pos().y());
+			//				x1=updateX(robotPath.get(j).getLocation().x());
+			//				y1=updateY(robotPath.get(j).getLocation().y());
+			//				if(pointOnEdge(robotPath.get(j-1).getLocation(), robotPath.get(j).getLocation(), robot.get_pos()))
+			//					StdDraw.line(x0, y0, x1, y1);	
+			//				}//if
+			//				else if(j==robotPath.size()-1 && pointOnEdge(robotPath.get(j-1).getLocation(), robotPath.get(j).getLocation(), robot.getTarget().getLocation()))
+			//				{
+			//					x0=updateX(robotPath.get(j-1).getLocation().x());
+			//					y0=updateY(robotPath.get(j-1).getLocation().y());
+			//					x1=updateX(robot.getTarget().getLocation().x());
+			//					y1=updateY(robot.getTarget().getLocation().y());
+			//						StdDraw.line(x0, y0, x1, y1);	
+			//				}//else if
+			//				else 
+			//				{
+			//					x0=updateX(robotPath.get(j-1).getLocation().x());
+			//					y0=updateY(robotPath.get(j-1).getLocation().y());
+			//					x1=updateX(robotPath.get(j).getLocation().x());
+			//					y1=updateY(robotPath.get(j).getLocation().y());
+			//					StdDraw.line(x0, y0, x1, y1);
+			//				}
+			//						
+			//			}//for
+
 			double xr=updateX(robot.get_pos().x());
 			double yr=updateY(robot.get_pos().y());
 			//StdDraw.circle(xr, yr, 10);
@@ -255,7 +255,7 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 				StdDraw.circle(xr,yr,25);
 			}//if
 			i++;
-			
+
 		}//for
 	}//updateRobots
 	private boolean pointOnEdge(Point3D start,Point3D end,Point3D mid){
@@ -313,7 +313,7 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 	 */
 	private void drawEndFrame() {
 		StdDraw.setPenColor(Color.RED);
-		
+
 	}
 
 	/**
@@ -325,18 +325,24 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 		StdDraw.text(140.0, 570.0 , "Time: "+Double.toString(this.timeToEnd));
 		StdDraw.text(340.0, 570.0 , "Moves: "+Double.toString(this.moves));
 		StdDraw.text(500.0, 570.0 , "Your place in class: "+Double.toString(place));
+		if(log.containsKey(id))
 		StdDraw.text(650.0, 570.0 , "Best Score: " + log.get(id).get(level));
+		else
+			StdDraw.text(650.0, 570.0 , "Best Score: 0");
 		StdDraw.text(840.0, 570.0 , "Number of games played: " + numOfGame.get(id));
 	}//drawScore
 
 	private int placeNum() {
-		int myScore = log.get(id).get(level);
-		int counter = 1;
-		for(Integer ID : log.keySet()) {
-			if(log.get(ID).get(level)>myScore)
-				counter++;
+		if(log.containsKey(id)) {
+			int myScore = log.get(id).get(level);
+			int counter = 1;
+			for(Integer ID : log.keySet()) {
+				if(log.get(ID).get(level)>myScore)
+					counter++;
+			}
+			return counter;
 		}
-		return counter;
+		return log.size();
 	}
 
 	/**
@@ -506,7 +512,7 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 
 	}
 
-	
+
 
 }
 

@@ -5,6 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
+
+
 /**
  * This class represents a simple example of using MySQL Data-Base.
  * Use this example for writing solution. 
@@ -25,7 +27,7 @@ public class SimpleDB {
 	public static void main(String[] args) {
 		int id1 = 206333650;  
 		int level = 0;
-		//allUsers();
+		allUsers();
 		printLog();
 		String kml = getKML(id1,level);
 		System.out.println("***** KML file example: ******");
