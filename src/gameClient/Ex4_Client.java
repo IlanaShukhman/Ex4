@@ -3,24 +3,22 @@ package gameClient;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import Server.Game_Server;
 import Server.game_service;
-import algorithms.Ex3_Algo;
+import algorithms.Ex4_Algo;
 import algorithms.Graph_Algo;
 import dataStructure.DGraph;
 import dataStructure.edge_data;
 import dataStructure.graph;
 import utils.Point3D;
+
 /**
  * This class represents a simple example for using the GameServer API:
  * the main file performs the following tasks:
@@ -41,7 +39,7 @@ import utils.Point3D;
  *
  */
 
-public class Ex4_Client implements Runnable{
+public class Ex4_Client extends JFrame implements Runnable{
 
 	private static List<Robot_Client> robots;
 	private static List<Fruit_Client> fruits;
@@ -58,11 +56,11 @@ public class Ex4_Client implements Runnable{
 	@Override
 	public void run() {
 
+		//get id of the user and login
 		String getID=JOptionPane.showInputDialog(this, "Type in your ID:");
 		int id = Integer.valueOf(getID);
 		Game_Server.login(id);
 
-		//Create Graph
 		String s=chooseScenarioFromList();
 		//if the user decided to cancel
 		if(s==null)
@@ -72,19 +70,24 @@ public class Ex4_Client implements Runnable{
 
 
 		try {
-			game_service g = Game_Server.getServer(scenario_num);
+			Game_Server.getServer(scenario_num);
 		}catch(Exception e) {
-			JOptionPane.showInputDialog("you are trying to play in a level above yours!");
-
+			try {
+				JOptionPane.showMessageDialog(this, "You are trying to play in a level above yours!");
+				//this will throw an error because of jframe, we would like to catch it but do nothing
+			}catch(Exception e1){
+			}
 		}
 		game_service game = Game_Server.getServer(scenario_num);
 		String g = game.getGraph();
 		gameGraph = new DGraph();
 		gameGraph.init(g);
 		game.startGame();
+
 		//Create the lists of robots and fruits
 		robots=new ArrayList<Robot_Client>();
 		fruits=new ArrayList<Fruit_Client>();
+
 		//Game Server information such as:fruites,moves,grade,robots,graph,data
 		String info = game.toString();
 		GameServer_Client gameServer=new GameServer_Client();
@@ -92,7 +95,8 @@ public class Ex4_Client implements Runnable{
 		int numRobots = gameServer.get_robots_number();
 		System.out.println(gameServer);
 		System.out.println(g);
-		Ex3_Algo ex3_alg=new Ex3_Algo();
+		Ex4_Algo ex3_alg=new Ex4_Algo();
+
 		// update and displaying the fruites
 		int numFruits = gameServer.get_fruits_number();
 		for (int i = 0; i < numFruits; i++) {
@@ -103,8 +107,8 @@ public class Ex4_Client implements Runnable{
 			fruits.add(fruit);
 		}//for
 
+		//compare the fruits and sort them
 		Comparator<Fruit_Client> valueOrder=new Comparator<Fruit_Client>() {
-
 			@Override
 			public int compare(Fruit_Client f1, Fruit_Client f2) {
 				int dp =(int)(f2.getValue()-f1.getValue());
@@ -131,7 +135,8 @@ public class Ex4_Client implements Runnable{
 		gui.setIsRunning(true);
 		gui.setLevel(scenario_num);
 		System.out.println(gameServer.get_data());
-
+		
+		
 		long dt=0;
 
 
@@ -139,17 +144,9 @@ public class Ex4_Client implements Runnable{
 			moveRobots(game, gameGraph);
 			updateFruites(game);
 			updateSrc();	
-//			double sumSpeed = robots.get(0).get_speed()+robots.get(1).get_speed()+robots.get(2).get_speed();
-//			if(sumSpeed<8)
-//				dt=200;
-//			else if(sumSpeed<13)
-//				dt=80;
-//			else
-//				dt=30;
 			try {
-				Thread.sleep(0);
+				Thread.sleep(dt);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -161,42 +158,43 @@ public class Ex4_Client implements Runnable{
 
 
 
-				KML_Logger kmlfile = new KML_Logger(scenario_num, gameGraph, robots, fruits, game);
-				String res = game.toString();
-				String remark = kmlfile.getKMLFile();
-				game.sendKML(remark); // Should be your KML (will not work on case -1).
-				System.out.println(res);
+		KML_Logger kmlfile = new KML_Logger(scenario_num, gameGraph, robots, fruits, game);
+		String res = game.toString();
+		String remark = kmlfile.getKMLFile();
+		game.sendKML(remark); // Should be your KML (will not work on case -1).
+		System.out.println(res);
 
 
 	}
-/**
- * Opening KML format
- */
+
+
+	/**
+	 * Opening a file in KML format
+	 */
 	private void openKML() {
 		String path="data/"+String.valueOf(gui.getLevel())+".kml";
 		File file = new File(path);
-        
-        //first check if Desktop is supported by Platform or not
-        if(!Desktop.isDesktopSupported()){
-            System.out.println("Desktop is not supported");
-            return;
-        }
-        
-        Desktop desktop = Desktop.getDesktop();
-        if(file.exists())
+
+		//first check if Desktop is supported by Platform or not
+		if(!Desktop.isDesktopSupported()){
+			System.out.println("Desktop is not supported");
+			return;
+		}
+
+		Desktop desktop = Desktop.getDesktop();
+		if(file.exists())
 			try {
 				desktop.open(file);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		
-		
+
+
 	}
 
 	/** 
 	 * Moves each of the robots along the edge, 
-	 * in case the robot is on a node the next destination (next edge) is chosen (randomly).
+	 * in case the robot is on a node the next destination (next edge) is chosen.
 	 * @param game
 	 * @param gg
 	 * @param log
@@ -221,13 +219,16 @@ public class Ex4_Client implements Runnable{
 				int src = robot.get_src();
 				int dest = robot.get_dest();
 				Point3D pos = robot.get_pos();
+
+
 				//if it is automatic
 				if(gui.getState()==1) {
 					robots.get(i).initFromJson(robot_json);
 					Automatic_Movement am = new Automatic_Movement(g_algo, fruits, robots);
-					dest = am.nextNodeAuto(graph, src, robots.get(i),gameServer.get_fruits_number());
+					dest = am.nextNodeAuto(graph, src, robots.get(i), gameServer.get_fruits_number());
 					robot.set_dest(dest);	
 					game.chooseNextEdge(rid, dest);
+
 				}//if
 
 				//if it is manual
@@ -236,7 +237,7 @@ public class Ex4_Client implements Runnable{
 					robots.get(i).set_src(src);
 					robot=gui.getSelectedRobot();
 					dest=gui.getSelectedNode();
-					Manual_Movement mm = new Manual_Movement(g_algo, gameGraph, robots, fruits);
+					Manual_Movement mm = new Manual_Movement(g_algo, gameGraph, robots);
 
 					//after the user clicked 
 					if(robot!=null && dest!=-1) {
@@ -282,7 +283,9 @@ public class Ex4_Client implements Runnable{
 	}//updateFruites
 
 
-	
+	/**
+	 * A simple function to update the robots' src node when they get to a node in the graph.
+	 */
 	private static void updateSrc() {
 		for(Robot_Client robot: robots) {
 			for(Integer node : gameGraph.get_Node_Hash().keySet()) {
@@ -293,7 +296,12 @@ public class Ex4_Client implements Runnable{
 		}
 
 	}
-
+	/**
+	 * A simple function to determine if two points are close to each other.
+	 * @param node1 is one point
+	 * @param node2 is the secont point
+	 * @return true if they are close (distance less then 0.0005), else, returns false.
+	 */
 	private static boolean isClose(Point3D node1, Point3D node2) {
 		if(node1.distance2D(node2)<0.0005)
 			return true;

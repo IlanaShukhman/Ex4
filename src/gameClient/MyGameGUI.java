@@ -1,14 +1,11 @@
 package gameClient;
 
 import java.awt.Color;
-import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,8 +13,6 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import Server.Game_Server;
-import Server.game_service;
 import dataStructure.DGraph;
 import utils.Point3D;
 import utils.Range;
@@ -26,7 +21,7 @@ import utils.StdDraw;
 /**
  * This class represents a simple gui for the class SimpleGameClient.
  * In this class, we use the StdDraw Library to draw the graph on the screen. 
- * @author Ilana
+ * @author Ilana & Michael
  */
 
 public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,Runnable{
@@ -211,11 +206,11 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 			StdDraw.setPenColor(color[i]);
 			double xr=updateX(robot.get_pos().x());
 			double yr=updateY(robot.get_pos().y());
-			//StdDraw.circle(xr, yr, 10);
 			StdDraw.picture(xr, yr, "car.png", 25, 25);
 			StdDraw.text(xr, yr-20, "Grade:"+String.valueOf(robot.get_value()));
 			StdDraw.text(xr, yr-40, "Speed:"+String.valueOf(robot.get_speed()));
 			StdDraw.text(xr, yr-60, "Target:["+robot.getTarget().getEdge().getSrc()+","+robot.getTarget().getEdge().getDest()+"]");
+			
 			if(robot.equals(selectedRobot)){
 				StdDraw.circle(xr,yr,25);
 			}//if
@@ -246,6 +241,25 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 
 	}
 
+	/**
+	 * End Frame: Game Is Over
+	 */
+	private void drawEndFrame() {
+		StdDraw.setPenColor(Color.RED);
+	}
+	
+	/**
+	 * Drawing the score of the game
+	 */
+	private void drawGameInfo() {
+		StdDraw.text(230.0, 570.0 , "Score: "+Double.toString(this.score));
+		StdDraw.text(50.0, 570.0 , "Level: "+Double.toString(this.level));
+		StdDraw.text(140.0, 570.0 , "Time: "+Double.toString(this.timeToEnd));
+		StdDraw.text(340.0, 570.0 , "Moves: "+Double.toString(this.moves));
+		StdDraw.text(500.0, 570.0 , "Your place in class: "+Double.toString(place));
+		StdDraw.text(650.0, 570.0 , "Best Score: " + log.get(id).get(level));
+		StdDraw.text(840.0, 570.0 , "Number of games played: " + numOfGame.get(id));
+	}//drawScore
 
 
 	/**
@@ -270,27 +284,6 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 		StdDraw.show();
 
 	}//Draw
-
-	/**
-	 * End Frame: Game Is Over
-	 */
-	private void drawEndFrame() {
-		StdDraw.setPenColor(Color.RED);
-		
-	}
-
-	/**
-	 * Drawing the score of the game
-	 */
-	private void drawGameInfo() {
-		StdDraw.text(230.0, 570.0 , "Score: "+Double.toString(this.score));
-		StdDraw.text(50.0, 570.0 , "Level: "+Double.toString(this.level));
-		StdDraw.text(140.0, 570.0 , "Time: "+Double.toString(this.timeToEnd));
-		StdDraw.text(340.0, 570.0 , "Moves: "+Double.toString(this.moves));
-		StdDraw.text(500.0, 570.0 , "Your place in class: "+Double.toString(place));
-		StdDraw.text(650.0, 570.0 , "Best Score: " + log.get(id).get(level));
-		StdDraw.text(840.0, 570.0 , "Number of games played: " + numOfGame.get(id));
-	}//drawScore
 
 	private int placeNum() {
 		int myScore = log.get(id).get(level);

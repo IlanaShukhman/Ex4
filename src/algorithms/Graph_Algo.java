@@ -20,6 +20,7 @@ import dataStructure.DGraph;
 import dataStructure.edge_data;
 import dataStructure.graph;
 import dataStructure.node_data;
+
 /**
  * This class represents the set of graph-theory algorithms,
  * such as: isConnected, which should return true if there is a path between every node
@@ -35,6 +36,7 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 	private DGraph Graph;
 	private HashMap<node_data, node_data> predessesors;
 	private boolean IOException;
+	
 	/**
 	 * Constructors:
 	 */
@@ -89,9 +91,10 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 
 	}//init
 
-	/** Saves the graph to a Json file.
+	/** 
+	 * Saves the graph to a Json file.
 	 * Using external jar of Gson - Google implementation
-	 * @param file_name
+	 * @param file_name is the name of the file
 	 */
 	public void save(String file_name) {
 		try
@@ -116,6 +119,14 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		}//catch 
 	}//save
 
+	/**
+	 * BFS is an algorithm for searching a graph data structures. 
+	 * It starts at the source node, 
+	 * and explores all of the neighbor nodes at the present depth 
+	 * prior to moving on to the nodes at the next depth level.
+	 * For more information : https://en.wikipedia.org/wiki/Breadth-first_search
+	 * @param source_key is the node from which the algorithm starts.
+	 */
 	public void BFS(int source_key)
 	{
 		this.predessesors=new HashMap<node_data, node_data>();
@@ -145,7 +156,8 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 	
 	
 	/**
-	 * Pass all the nodes and color them to white, predessesors to null and distanse to infinity
+	 * This method goes through all the nodes and color them to white, 
+	 * sets predecessors to null and sets distance to infinity
 	 */
 	private void initializingNodes(graph g) {
 		Collection<node_data> ver=g.getV();
@@ -234,6 +246,7 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 
 		return finish;
 	}//DFS
+	
 	/**
 	 * This private function will start at node, and do a DFS search. 
 	 * @param g - Given Graph
@@ -288,7 +301,7 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 	}//transpose
 
 	/**
-	 * returns the length of the shortest path between src to dest
+	 * Returns the length of the shortest path between src to dest
 	 * We are using Dikkstra Algorithm to find the length of the shortest path
 	 * @param src - start node
 	 * @param dest - end (target) node
@@ -297,21 +310,21 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 	public double shortestPathDist(int src, int dest) {
 		if(!this.Graph.get_Node_Hash().containsKey(src) || !this.Graph.get_Node_Hash().containsKey(dest))
 			throw new RuntimeException("ERR: One of the nodes aren't exist!");
+		
 		else if(src==dest)//If they are the same vertices
 			return 0;
-
-		else//We need to find the path if it's exist by Dijkstra Algo
-		{
+		
+		//We need to find the path if it's exist by Dijkstra Algo
+		else{
 			Dijkstra(src,dest);
 		}//else
 		if(this.Graph.getNode(dest).getWeight()<Double.MAX_VALUE)
 			return this.Graph.getNode(dest).getWeight();
 		return -1;
 	}//shortestPathDist
+	
 	/**
 	 * This function represent the shortest path between src node and dest node
-	 * Time Complexity isn't the calssic O(E+V*log(V)) Because we don't use Min Heap DS
-	 * Time Complexity: O(n^2)
 	 * @param src - source node
 	 * @param dest - destination node
 	 */
@@ -374,9 +387,8 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		}//else
 
 	}//shortestPath
-	public List<node_data> BFS_PATH(int src,int dest)
-	{
-		
+	
+	private List<node_data> BFS_PATH(int src,int dest){	
 		BFS(src);
 		List<node_data> path=new ArrayList<node_data>();
 		
@@ -404,15 +416,13 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		}//else
 
 	}//BFS_PATH
+	
 	/**
 	 * computes a relatively short path which visit each node in the targets List.
 	 * Note: this is NOT the classical traveling salesman problem,
 	 * as you can visit a node more than once, and there is no need to return to source node -
 	 * just a simple path going over all nodes in the list.
 	 * We simply go with the flow of the list and use Shortest Path on pair of each pair of vertices with n shuffles
-	 * Assume that the targets is a set of k vertices so:
-	 * Time Complexity is about: O(k*n^3)
-	 * Time Complexity: O(n^4) iff k=n.
 	 * @param targets
 	 * @return
 	 */
@@ -592,6 +602,7 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 	
 	/**
 	 * Equals Function
+	 * @return true if the two objects are equals.
 	 */
 	@Override
 	public boolean equals(Object a)
@@ -617,6 +628,7 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 	{
 		return this.ClassNotFoundException;
 	}//getFilesERR
+	
 	/**
 	 * TSP help function
 	 * @param list
@@ -631,6 +643,7 @@ public class Graph_Algo implements graph_algorithms,Serializable{
 		}//for
 		return set;
 	}//removeDuplicate
+	
 	/**
 	 * Convert List of nodes to their keys
 	 * @param nodes

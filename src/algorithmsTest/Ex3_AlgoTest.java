@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import Server.Game_Server;
 import Server.game_service;
-import algorithms.Ex3_Algo;
+import algorithms.Ex4_Algo;
 import dataStructure.DGraph;
 import dataStructure.EdgeData;
 import dataStructure.edge_data;
@@ -71,7 +71,7 @@ class Ex3_AlgoTest {
 
 		Fruit_Client fruit= fruits.get(0);
 		
-		Ex3_Algo a=new Ex3_Algo();
+		Ex4_Algo a=new Ex4_Algo();
 
 		edge_data EXPECTED=new EdgeData(9,8,1.8);
 		edge_data ACTUAL=a.fetchFruitToEdge(fruit, gameGraph);

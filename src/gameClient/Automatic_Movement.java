@@ -3,7 +3,7 @@ package gameClient;
 import java.util.List;
 import java.util.Random;
 
-import algorithms.Ex3_Algo;
+import algorithms.Ex4_Algo;
 import algorithms.Graph_Algo;
 import dataStructure.graph;
 import dataStructure.node_data;
@@ -18,12 +18,9 @@ public class Automatic_Movement {
 	private Graph_Algo g_algo;
 	private List<Fruit_Client> fruits;
 	private List<Robot_Client> robots;
-	
+
 	/**
-	 * Constructor
-	 * @param g_algo
-	 * @param fruits
-	 * @param robots
+	 * Constructor:
 	 */
 	public Automatic_Movement(Graph_Algo g_algo, List<Fruit_Client> fruits, List<Robot_Client> robots) {
 		super();
@@ -32,44 +29,44 @@ public class Automatic_Movement {
 		this.robots = robots;
 	}
 
-	
-	
-	
+
+
+
 
 	/**
 	 * Automatic next robot step by the recalculating path
-	 * @param g
-	 * @param src
+	 * @param g is a given graph - roadmap
+	 * @param src is the source node
+	 * @param robot is a given robot
+	 * @param numOfFruits is the number of fruits on the graph
 	 * @return
 	 */
-	public int nextNodeAuto(graph g, int src,Robot_Client robot,int numOfFruites) {	
-//		if(robot.get_id()==0)
-//			return src;
+	public int nextNodeAuto(graph g, int src, Robot_Client robot, int numOfFruites) {	
 		Fruit_Client close_fruit=choose_Close_Fruites(robot,g,numOfFruites);
-		Ex3_Algo algo=new Ex3_Algo();
+		Ex4_Algo algo=new Ex4_Algo();
 		close_fruit.setEdge(algo.fetchFruitToEdge(close_fruit, g));
 
 		g_algo=new Graph_Algo(g);
 		List<node_data> path=g_algo.shortestPath(src, close_fruit.getEdge().getSrc());
-		
-		
-		
+
+
+
 		if(path.size()==1)
 			return close_fruit.getEdge().getDest();
-		
-		
+
+
 		path.add(g.getNode(close_fruit.getEdge().getDest()));
 		int dest=path.get(1).getKey();
 		g.getNode(dest).setInfo(String.valueOf(src));
 		robot.setTarget(close_fruit);
-		
+
 		return dest;
 	}
 
 	/**
 	 * Choosing the fruit with the lowest distance and highest value by proportion 
-	 * @param robot
-	 * @param g
+	 * @param robot is a given robot
+	 * @param g is the graph
 	 * @return
 	 */
 	private Fruit_Client choose_Close_Fruites(Robot_Client robot,graph g,int numOfFruites) {
@@ -88,8 +85,8 @@ public class Automatic_Movement {
 			shortestpath=(g_algo.shortestPathDist(src,fruit.getEdge().getSrc())+porportion);
 			if(alreadyTargeted(fruit)==-1 && min>shortestpath)
 			{		
-					min=shortestpath;
-					target=fruit;
+				min=shortestpath;
+				target=fruit;
 			}//if
 			else if(alreadyTargeted(fruit)!=-1 && min>shortestpath && robots.get(alreadyTargeted(fruit)).getPathLength()>shortestpath)
 			{
@@ -97,6 +94,8 @@ public class Automatic_Movement {
 				target=fruit;
 			}//else if
 		}//for
+		
+		
 		if(alreadyTargeted(target)!=-1) {//Changing the fruit randomally
 			Random rand=new Random();
 			int id=rand.nextInt(numOfFruites);
@@ -104,6 +103,7 @@ public class Automatic_Movement {
 			robots.get(alreadyTargeted(target)).setTarget(fruits.get(id));
 			fruits.get(0).getEdge().setTag(1);
 		}//if
+		
 		robot.getTarget().getEdge().setTag(0);
 		robot.setTarget(target);
 		target.getEdge().setTag(1);
@@ -120,8 +120,8 @@ public class Automatic_Movement {
 	 * Check if is already targeted
 	 * true: return the robot id 
 	 * false: return -1
-	 * @param f
-	 * @return
+	 * @param f is a given fruit
+	 * @return -1 if its not any robot's target. Else, returns the robot's ID. 
 	 */
 	private int alreadyTargeted(Fruit_Client f) {
 		for (int i=0;i<robots.size();i++) {
@@ -130,8 +130,8 @@ public class Automatic_Movement {
 		}//for
 		return -1;
 	}//alreadyTarget
-private boolean onTheSameEdge(int src1,int dest1,int src2,int dest2)
-{
-	return ((src1==src2)&&(dest1==dest2)) || ((src1==dest2)&&(dest1==src2));
-}//onTheSameEdge
+	
+	private boolean onTheSameEdge(int src1,int dest1,int src2,int dest2){
+		return ((src1==src2)&&(dest1==dest2)) || ((src1==dest2)&&(dest1==src2));
+	}//onTheSameEdge
 }

@@ -15,15 +15,13 @@ public class Manual_Movement {
 	private Graph_Algo g_algo;
 	private DGraph gameGraph;
 	private List<Robot_Client> robots;
-	private List<Fruit_Client> fruits;
 	
 	
-	public Manual_Movement(Graph_Algo g_algo, DGraph gameGraph, List<Robot_Client> robots, List<Fruit_Client> fruits) {
+	public Manual_Movement(Graph_Algo g_algo, DGraph gameGraph, List<Robot_Client> robots) {
 		super();
 		this.g_algo = g_algo;
 		this.gameGraph = gameGraph;
 		this.robots = robots;
-		this.fruits = fruits;
 	}
 
 	/**
@@ -51,7 +49,7 @@ public class Manual_Movement {
 	
 
 	/**
-	 * return false if dest is a node that a robot is on-
+	 * Return false if dest is a node that a robot is on-
 	 * that means the user probably tried to pick up the robot, and not the node.
 	 * @param dest is the node the user clicked on
 	 * @return false if there is a robot on dest - else, true, and it is okay to go there.
