@@ -14,7 +14,7 @@ import dataStructure.DGraph;
 /**
  * The purpose of this class is to make a KML file of a running game. 
  * It will run alongside with the game, and save the robots and fruits' coordinates every second. 
- * @author Ilana
+ * @author Ilana & Michael
  *
  */
 
@@ -31,7 +31,6 @@ public class KML_Logger implements Runnable {
 	/**
 	 * Constructor.
 	 */
-
 	public KML_Logger(int level, DGraph graph, List<Robot_Client> robots, List<Fruit_Client> fruits , game_service game) {
 		this.graph=new DGraph(graph);
 		this.robots=robots;
@@ -219,11 +218,11 @@ public class KML_Logger implements Runnable {
 					"<coordinates>"+ graph.get_Node_Hash().get(node).getLocation() + "</coordinates>\r\n"+  
 					"</Point>\r\n"+
 					"</Placemark>\r\n";
-		}
+		}//for
 
 
 		return str;
-	}
+	}//addPoints
 	/**
 	 * This method receives a text in kml format, and saves it as a file.
 	 * The file's name is the level and a .kml
