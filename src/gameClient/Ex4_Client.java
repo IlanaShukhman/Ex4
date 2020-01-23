@@ -132,7 +132,7 @@ public class Ex4_Client implements Runnable{
 		gui.setLevel(scenario_num);
 		System.out.println(gameServer.get_data());
 
-		long dt=0;
+		long dt=100;
 
 
 		while(game.isRunning()) {
@@ -147,7 +147,7 @@ public class Ex4_Client implements Runnable{
 //			else
 //				dt=30;
 			try {
-				Thread.sleep(0);
+				Thread.sleep(dt);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -155,17 +155,18 @@ public class Ex4_Client implements Runnable{
 		}
 
 		gui.setIsRunning(false);
+		
 		int check=JOptionPane.showConfirmDialog(null, "Do you want to see your steps on Google Earth App?\nPrerequist:Google-Earth app.");
 		if(check==0)
 			openKML();
 
 
 
-				KML_Logger kmlfile = new KML_Logger(scenario_num, gameGraph, robots, fruits, game);
-				String res = game.toString();
-				String remark = kmlfile.getKMLFile();
-				game.sendKML(remark); // Should be your KML (will not work on case -1).
-				System.out.println(res);
+		KML_Logger kmlfile = new KML_Logger(scenario_num, gameGraph, robots, fruits, game);
+		String res = game.toString();
+		String remark = kmlfile.getKMLFile();
+		game.sendKML(remark); // Should be your KML (will not work on case -1).
+		System.out.println(res);
 
 
 	}

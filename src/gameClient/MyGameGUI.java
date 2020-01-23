@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 import Server.Game_Server;
 import Server.game_service;
 import dataStructure.DGraph;
+import dataStructure.node_data;
 import utils.Point3D;
 import utils.Range;
 import utils.StdDraw;
@@ -33,7 +34,7 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 
 
 	private DGraph graph;
-
+	private Double EPS=0.000000001;
 	private int width;
 	private int height;
 	private Range rx;
@@ -205,10 +206,44 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 	 * This function will draw the robots on the graph.
 	 */
 	private void drawRobots() {
-		Color[] color= {Color.blue,Color.darkGray,Color.green,Color.magenta,Color.pink};
+		Color[] color= {Color.blue,Color.green,Color.magenta,Color.pink};
 		int i=0;
 		for(Robot_Client robot : robots) {
 			StdDraw.setPenColor(color[i]);
+			List<node_data> robotPath=robot.getPath();
+			double x0=0;
+			double y0=0;
+			double x1=0;
+			double y1=0;
+			for (int j = 1; j < robotPath.size(); j++) {
+				if(j==1)
+				{
+				x0=updateX(robot.get_pos().x());
+				y0=updateY(robot.get_pos().y());
+				x1=updateX(robotPath.get(j).getLocation().x());
+				y1=updateY(robotPath.get(j).getLocation().y());
+				if(pointOnEdge(robotPath.get(j-1).getLocation(), robotPath.get(j).getLocation(), robot.get_pos()))
+					StdDraw.line(x0, y0, x1, y1);	
+				}//if
+				else if(j==robotPath.size()-1 && pointOnEdge(robotPath.get(j-1).getLocation(), robotPath.get(j).getLocation(), robot.getTarget().getLocation()))
+				{
+					x0=updateX(robotPath.get(j-1).getLocation().x());
+					y0=updateY(robotPath.get(j-1).getLocation().y());
+					x1=updateX(robot.getTarget().getLocation().x());
+					y1=updateY(robot.getTarget().getLocation().y());
+						StdDraw.line(x0, y0, x1, y1);	
+				}//else if
+				else 
+				{
+					x0=updateX(robotPath.get(j-1).getLocation().x());
+					y0=updateY(robotPath.get(j-1).getLocation().y());
+					x1=updateX(robotPath.get(j).getLocation().x());
+					y1=updateY(robotPath.get(j).getLocation().y());
+					StdDraw.line(x0, y0, x1, y1);
+				}
+						
+			}//for
+		
 			double xr=updateX(robot.get_pos().x());
 			double yr=updateY(robot.get_pos().y());
 			//StdDraw.circle(xr, yr, 10);
@@ -219,11 +254,13 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 			if(robot.equals(selectedRobot)){
 				StdDraw.circle(xr,yr,25);
 			}//if
-
 			i++;
+			
 		}//for
 	}//updateRobots
-
+	private boolean pointOnEdge(Point3D start,Point3D end,Point3D mid){
+		return(Math.abs(start.distance2D(end)-(start.distance2D(mid)+end.distance2D(mid)))<=EPS);
+	}//fruitOnEdge
 	/**
 	 * This function will draw the fruits on the graph.
 	 */

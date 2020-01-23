@@ -1,9 +1,14 @@
 
 package gameClient;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.json.JSONObject;
 
 import Server.robot;
+import dataStructure.edge_data;
+import dataStructure.node_data;
 import utils.Point3D;
 
 /**
@@ -23,12 +28,13 @@ public class Robot_Client {
 	private double _speed;
 	private Fruit_Client target;
 	private double pathLength;
-
+	private List<node_data> path;
 	/**
 	 * Constructors:
 	 */
 	public Robot_Client(){
 		this.pathLength=0;
+		this.path=new ArrayList<node_data>();
 	}
 
 	
@@ -82,9 +88,25 @@ public class Robot_Client {
 	 * Getters & Setters:
 	 * @return
 	 */
+	
+
+
 	public double getPathLength() {
 		return pathLength;
 	}
+
+	public List<node_data> getPath() {
+		return path;
+	}
+
+
+
+	public void setPath(List<node_data> path) {
+		this.path.clear();
+		this.path.addAll(path);
+	}
+
+
 
 	public void setPathLength(double pathLength) {
 		this.pathLength = pathLength;
