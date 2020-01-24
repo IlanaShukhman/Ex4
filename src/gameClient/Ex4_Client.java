@@ -102,7 +102,6 @@ public class Ex4_Client implements Runnable{
 		}//for
 
 		Comparator<Fruit_Client> valueOrder=new Comparator<Fruit_Client>() {
-
 			@Override
 			public int compare(Fruit_Client f1, Fruit_Client f2) {
 				int dp =(int)(f2.getValue()-f1.getValue());
@@ -137,7 +136,7 @@ public class Ex4_Client implements Runnable{
 			moveRobots(game, gameGraph);
 			updateFruites(game);
 			updateSrc();	
-			dt=30;
+			dt=100;
 			try {
 				Thread.sleep(dt);
 			} catch (InterruptedException e) {

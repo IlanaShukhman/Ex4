@@ -210,43 +210,13 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 		int i=0;
 		for(Robot_Client robot : robots) {
 			StdDraw.setPenColor(color[i]);
-			//			List<node_data> robotPath=robot.getPath();
-			//			double x0=0;
-			//			double y0=0;
-			//			double x1=0;
-			//			double y1=0;
-			//			for (int j = 1; j < robotPath.size(); j++) {
-			//				if(j==1)
-			//				{
-			//				x0=updateX(robot.get_pos().x());
-			//				y0=updateY(robot.get_pos().y());
-			//				x1=updateX(robotPath.get(j).getLocation().x());
-			//				y1=updateY(robotPath.get(j).getLocation().y());
-			//				if(pointOnEdge(robotPath.get(j-1).getLocation(), robotPath.get(j).getLocation(), robot.get_pos()))
-			//					StdDraw.line(x0, y0, x1, y1);	
-			//				}//if
-			//				else if(j==robotPath.size()-1 && pointOnEdge(robotPath.get(j-1).getLocation(), robotPath.get(j).getLocation(), robot.getTarget().getLocation()))
-			//				{
-			//					x0=updateX(robotPath.get(j-1).getLocation().x());
-			//					y0=updateY(robotPath.get(j-1).getLocation().y());
-			//					x1=updateX(robot.getTarget().getLocation().x());
-			//					y1=updateY(robot.getTarget().getLocation().y());
-			//						StdDraw.line(x0, y0, x1, y1);	
-			//				}//else if
-			//				else 
-			//				{
-			//					x0=updateX(robotPath.get(j-1).getLocation().x());
-			//					y0=updateY(robotPath.get(j-1).getLocation().y());
-			//					x1=updateX(robotPath.get(j).getLocation().x());
-			//					y1=updateY(robotPath.get(j).getLocation().y());
-			//					StdDraw.line(x0, y0, x1, y1);
-			//				}
-			//						
-			//			}//for
-
+			//Trying to represent the whole path lines - unsuccessfully 
+//			List<node_data> robotPath=robot.getPath();
+//			drawingRobotPath(robotPath,robot);
+			
+			
 			double xr=updateX(robot.get_pos().x());
 			double yr=updateY(robot.get_pos().y());
-			//StdDraw.circle(xr, yr, 10);
 			StdDraw.picture(xr, yr, "car.png", 25, 25);
 			StdDraw.text(xr, yr-20, "Grade:"+String.valueOf(robot.get_value()));
 			StdDraw.text(xr, yr-40, "Speed:"+String.valueOf(robot.get_speed()));
@@ -258,6 +228,47 @@ public class MyGameGUI  extends JFrame implements ActionListener, MouseListener,
 
 		}//for
 	}//updateRobots
+	private void drawingRobotPath(List<node_data> robotPath, Robot_Client robot) {
+		double x0=0;
+		double y0=0;
+		double x1=0;
+		double y1=0;
+		//Drawing the first path line
+		if(robotPath.size()>2)
+		{
+			x0=updateX(robot.get_pos().x());
+			y0=updateY(robot.get_pos().y());
+			x1=updateX(robotPath.get(1).getLocation().x());
+			y1=updateY(robotPath.get(1).getLocation().y());
+			StdDraw.line(x0, y0, x1, y1);
+			int j;
+			//Drawing the middle lines
+			for (j = 2; j < robotPath.size()-1; j++) {
+				x0=updateX(robotPath.get(j-1).getLocation().x());
+				y0=updateY(robotPath.get(j-1).getLocation().y());
+				x1=updateX(robotPath.get(j).getLocation().x());
+				y1=updateY(robotPath.get(j).getLocation().y());
+				StdDraw.line(x0, y0, x1, y1);
+			}//for
+			//Drawing the last line
+			x0=updateX(robotPath.get(robotPath.size()-2).getLocation().x());
+			y0=updateY(robotPath.get(robotPath.size()-2).getLocation().y());
+			x1=updateX(robot.getTarget().getLocation().x());
+			y1=updateY(robot.getTarget().getLocation().y());
+			StdDraw.line(x0, y0, x1, y1);
+		}//if
+		//There is only last line
+		else if(robotPath.size()==2)
+		{
+			x0=updateX(robot.get_pos().x());
+			y0=updateY(robot.get_pos().y());
+			x1=updateX(robotPath.get(1).getLocation().x());
+			y1=updateY(robotPath.get(1).getLocation().y());
+			StdDraw.line(x0, y0, x1, y1);
+		}//else
+		
+	}
+
 	private boolean pointOnEdge(Point3D start,Point3D end,Point3D mid){
 		return(Math.abs(start.distance2D(end)-(start.distance2D(mid)+end.distance2D(mid)))<=EPS);
 	}//fruitOnEdge

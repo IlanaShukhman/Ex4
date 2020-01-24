@@ -54,9 +54,9 @@ public class Automatic_Movement {
 		if(path.size()==1)
 			return close_fruit.getEdge().getDest();
 
-
+		
 		path.add(g.getNode(close_fruit.getEdge().getDest()));
-		robot.setPath(path);
+		
 		int dest=path.get(1).getKey();
 		g.getNode(dest).setInfo(String.valueOf(src));
 		robot.setTarget(close_fruit);
